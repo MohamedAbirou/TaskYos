@@ -1,47 +1,52 @@
-import { db } from "@/lib/db"
-import { auth } from "@clerk/nextjs"
-import { redirect } from "next/navigation"
-import { ListContainer } from "./_components/list-container"
+import { auth } from "@clerk/nextjs";
+import { redirect } from "next/navigation";
 
-interface boardIdPageProps {
-    params: {
-        boardId: string
-    }
-}
+import { db } from "@/lib/db";
 
-const boardIdPage = async ({
-    params
-} : boardIdPageProps) => {
-    const { orgId } = auth()
+import { ListContainer } from "./_components/list-container";
 
-    if (!orgId) {
-        redirect('/select-org')
-    }
+interface BoardIdPageProps {
+  params: {
+    boardId: string;
+  };
+};
 
-    const lists = await db.list.findMany({
-        where: {
-            boardId: params.boardId,
-            board: {
-                orgId
-            }
-        },
-        include: {
-            cards: {
-                orderBy: {
-                    order: "asc"
-                }
-            }
-        },
+const BoardIdPage = async ({
+  params,
+}: BoardIdPageProps) => {
+  const { orgId } = auth();
+
+  if (!orgId) {
+    redirect("/select-org");
+  }
+  
+  const lists = await db.list.findMany({
+    where: {
+      boardId: params.boardId,
+      board: {
+        orgId,
+      },
+    },
+    include: {
+      cards: {
         orderBy: {
-            order: "asc"
-        }
-    })
+          order: "asc",
+        },
+      },
+    },
+    orderBy: {
+      order: "asc",
+    },
+  });
 
-    return (
-        <div className="p-4 h-full overflow-x-auto">
-            <ListContainer boardId={params.boardId} data={lists} />
-        </div>
-    )
-}
+  return (
+    <div className="p-4 h-full overflow-x-auto">
+      <ListContainer
+        boardId={params.boardId}
+        data={lists}
+      />
+    </div>
+  );
+};
 
-export default boardIdPage
+export default BoardIdPage;

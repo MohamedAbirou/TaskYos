@@ -1,28 +1,36 @@
 "use client";
 
-import { ActivityItem } from "@/components/activity-item";
-import { Skeleton } from "@/components/ui/skeleton";
 import { AuditLog } from "@prisma/client";
 import { ActivityIcon } from "lucide-react";
 
+import { Skeleton } from "@/components/ui/skeleton";
+import { ActivityItem } from "@/components/activity-item";
+
 interface ActivityProps {
   items: AuditLog[];
-}
+};
 
-export const Activity = ({ items }: ActivityProps) => {
+export const Activity = ({
+  items,
+}: ActivityProps) => {
   return (
     <div className="flex items-start gap-x-3 w-full">
       <ActivityIcon className="h-5 w-5 mt-0.5 text-neutral-700" />
       <div className="w-full">
-        <p className="font-semibold text-neutral-700 mb-2">Activity</p>
+        <p className="font-semibold text-neutral-700 mb-2">
+          Activity
+        </p>
         {items.length > 0 ? (
-            <ol className="mt-2 space-y-4">
+          <ol className="mt-2 space-y-4">
             {items.map((item) => (
-                <ActivityItem key={item.id} data={item} />
+              <ActivityItem
+                key={item.id}
+                data={item}
+              />
             ))}
-            </ol>
+          </ol>
         ) : (
-            <p className="text-sm text-muted-foreground">No activities available!</p>
+          <p className="text-muted-foreground">No activity available.</p>
         )}
       </div>
     </div>
