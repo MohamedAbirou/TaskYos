@@ -10,7 +10,7 @@ Taskyos is a task management tool platform
 
 ## Demo
 
-(Taskyos)[https://taskyos.vercel.app/]
+[Taskyos](https://taskyos.vercel.app/)
 
 ## Features
 
