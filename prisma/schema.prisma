@@ -1,5 +1,5 @@
 datasource db {
-  provider     = "mysql"
+  provider     = "mongodb"
   url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
@@ -9,14 +9,14 @@ generator client {
 }
 
 model Board {
-  id            String @id @default(uuid())
+  id            String @id @default(auto()) @map("_id") @db.ObjectId
   orgId         String
   title         String
   imageId       String
-  imageThumbUrl String @db.Text
-  imageFullUrl  String @db.Text
-  imageUserName String @db.Text
-  imageLinkHTML String @db.Text
+  imageThumbUrl String @db.String
+  imageFullUrl  String @db.String
+  imageUserName String @db.String
+  imageLinkHTML String @db.String
 
   lists List[]
 
@@ -25,11 +25,11 @@ model Board {
 }
 
 model List {
-  id    String @id @default(uuid())
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
   title String
   order Int
 
-  boardId String
+  boardId String @db.ObjectId
   board   Board  @relation(fields: [boardId], references: [id], onDelete: Cascade)
 
   cards Card[]
@@ -41,12 +41,12 @@ model List {
 }
 
 model Card {
-  id          String  @id @default(uuid())
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
   title       String
   order       Int
-  description String? @db.Text
+  description String? @db.String
 
-  listId String
+  listId String @db.ObjectId
   list   List   @relation(fields: [listId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
@@ -68,22 +68,22 @@ enum ENTITY_TYPE {
 }
 
 model AuditLog {
-  id          String      @id @default(uuid())
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
   orgId       String
   action      ACTION
   entityId    String
   entityType  ENTITY_TYPE
   entityTitle String
   userId      String
-  userImage   String      @db.Text
-  userName    String      @db.Text
+  userImage   String      @db.String
+  userName    String      @db.String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model OrgLimit {
-  id    String @id @default(uuid())
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
   orgId String @unique
   count Int    @default(0)
 
@@ -92,7 +92,7 @@ model OrgLimit {
 }
 
 model OrgSubscription {
-  id    String @id @default(uuid())
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
   orgId String @unique
 
   stripeCustomerId       String?   @unique @map(name: "stripe_customer_id")
