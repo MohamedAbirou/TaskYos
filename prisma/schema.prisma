@@ -1,7 +1,6 @@
 datasource db {
   provider     = "mongodb"
   url          = env("DATABASE_URL")
-  relationMode = "prisma"
 }
 
 generator client {
